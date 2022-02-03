@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Route, useHistory } from "react-router-dom";
+import { Route, useHistory, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadDictionaryFB } from "./redux/modules/dictionarylist";
 
 import DictionaryList from "./DictionaryList";
 import Add from "./Add";
-import Edit from "./Edit"
+import Edit from "./Edit";
 
 import { db } from "./firebase";
 import {
@@ -19,19 +19,11 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
-// const addDictionaryList = () => {
-//   dispatch(addDictionaryFB({text : text.current.value, completed: false}));
-// };
-
 function App() {
-  const [list, setList] = React.useState([
-    "영화관 가기",
-    "매일 책읽기",
-    "수영 배우기",
-  ]);
+  const { list } = useSelector(({ dictionary }) => ({ list: dictionary.list }));
   const history = useHistory();
   const dispatch = useDispatch();
-  const text = React.useRef(null);
+  // const text = React.useRef(null);
 
   React.useEffect(() => {
     console.log(db);
@@ -48,36 +40,31 @@ function App() {
         영어 단어장
       </Title>
       <Line />
-      <Container>
+      {/* <Container> */}
+      <Switch>
         <Route path="/" exact>
           <DictionaryList list={list} />
         </Route>
         <Route path="/Add" component={Add}></Route>
         <Route path="/Edit" component={Edit}></Route>
-      </Container>
-      <button
-        onClick={() => {
-          history.push("/Add");
-        }}
-      >
-        추가하기
-      </button>
+      </Switch>
+      {/* </Container> */}
     </div>
   );
 }
 
-const Container = styled.div`
-  max-width: 350px;
-  min-height: 20vh;
-  background: linear-gradient(to left, #ffaaaf, #ffe6eb);
-  padding: 16px;
-  margin: 20px auto;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-`;
+// const Container = styled.div`
+//   max-width: 350px;
+//   min-height: 20vh;
+//   background: linear-gradient(to left, #ffaaaf, #ffe6eb);
+//   padding: 16px;
+//   margin: 20px auto;
+//   border-radius: 5px;
+//   border: 1px solid #ddd;
+// `;
 
 const Title = styled.h3`
-  color: #ff607f;
+  color: #ffc314;
   text-align: center;
   font-size: 30px;
 `;
